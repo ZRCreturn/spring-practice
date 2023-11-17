@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
+import java.time.LocalDateTime;
 
 @Slf4j
 @RestController
@@ -31,7 +32,7 @@ public class EmployeeController {
      * @return
      */
     @PostMapping("/login")
-    public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request, HttpServletResponse response){
+    public R<Employee> login(@RequestBody Employee employee, HttpServletRequest request){
 
         //md5加密
         String password = employee.getPassword();
@@ -63,6 +64,22 @@ public class EmployeeController {
         request.getSession().removeAttribute("employee");
         return R.success("退出成功");
 
+    }
+
+    @PostMapping
+    public R<String> save (@RequestBody Employee employee, HttpServletRequest request){
+        employee.setPassword(DigestUtils.md5DigestAsHex("123456".getBytes()));
+
+        employee.setCreateTime(LocalDateTime.now());
+        employee.setUpdateTime(LocalDateTime.now());
+
+        Long empID = (Long) request.getSession().getAttribute("employee");
+
+        employee.setCreateUser(empID);
+        employee.setUpdateUser(empID);
+
+        employeeService.save(employee);
+        return R.success("新增员工成功");
     }
 }
 
