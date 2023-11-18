@@ -2,6 +2,7 @@ package com.returnZhang.reggie.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.returnZhang.reggie.common.CustomException;
 import com.returnZhang.reggie.entity.Category;
 import com.returnZhang.reggie.entity.Dish;
 import com.returnZhang.reggie.entity.Setmeal;
@@ -30,6 +31,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
 
         if(count > 0){
             //已经关联了菜品,抛出业务异常
+            throw new CustomException("当前分类关联了菜品，无法删除");
         }
 
         LambdaQueryWrapper<Setmeal> setmealLambdaQueryWrapper = new LambdaQueryWrapper<>();
@@ -37,6 +39,7 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
         int count2 = setMealService.count(setmealLambdaQueryWrapper);
         if(count > 0){
             //已经关联了套餐,抛出业务异常
+            throw new CustomException("当前分类关联了套餐，无法删除");
         }
 
         super.removeById(id);

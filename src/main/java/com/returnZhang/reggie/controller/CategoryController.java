@@ -40,7 +40,7 @@ public class CategoryController {
 
     @DeleteMapping
     public R<String> delete(Long ids){ //改为ids因为前端写错了
-        categoryService.removeById(ids);
+        categoryService.remove(ids);
         return R.success("分类信息删除成功");
     }
 }
