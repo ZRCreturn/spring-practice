@@ -77,14 +77,26 @@ public class DishController {
             //根据id查询分类对象
             Long categoryId = item.getCategoryId();
             Category category = categoryService.getById(categoryId);
-            String categoryName = category.getName();
-
-            dishDto.setCategoryName(categoryName);
+            if(category!= null){
+                String categoryName = category.getName();
+                dishDto.setCategoryName(categoryName);
+            }
             return dishDto;
         }).collect(Collectors.toList());
 
         dishDtoPage.setRecords(list);
 
         return R.success(dishDtoPage);
+    }
+
+    /**
+     * 根据菜品id查询菜品对应信息和对应口味信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/{id}")
+    public R<DishDto> get(@PathVariable Long id) {
+        DishDto dishDto = dishService.getByIdWithFlavor(id);
+        return R.success(dishDto);
     }
 }
