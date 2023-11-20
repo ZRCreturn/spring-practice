@@ -12,6 +12,7 @@ import com.returnZhang.reggie.service.SetMealService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -80,20 +81,16 @@ public class SetMealController {
 
         return R.success(setmealDtoPage);
     }
-}
-/**
- *
- *         List<DishDto> list = records.stream().map((item) -> {
 
- *             if(category!= null){
- *                 String categoryName = category.getName();
- *                 dishDto.setCategoryName(categoryName);
- *             }
- *             return dishDto;
- *         }).collect(Collectors.toList());
- *
- *         dishDtoPage.setRecords(list);
- *
- *         return R.success(dishDtoPage);
- *
- */
+    /**
+     * 删除套餐
+     * @param ids
+     * @return
+     */
+    @Transactional
+    @DeleteMapping
+    public R<String> delete(@RequestParam List<Long> ids){
+        setMealService.removeWithDish(ids);
+        return R.success("套餐数据删除成功");
+    }
+}
