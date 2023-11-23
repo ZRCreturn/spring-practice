@@ -58,6 +58,10 @@ public class ShoppingCartController {
         return R.success(cartServiceOne);
     }
 
+    /**
+     * 获取购物车信息
+     * @return
+     */
     @GetMapping("/list")
     public R<List<ShoppingCart>> list (){
         LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper();
@@ -66,5 +70,19 @@ public class ShoppingCartController {
         List<ShoppingCart> list = shoppingCartService.list(queryWrapper);
 
         return R.success(list);
+    }
+
+    /**
+     * 清空购物车
+     * @return
+     */
+    @DeleteMapping("/clean")
+    public R<String> clean(){
+        LambdaQueryWrapper<ShoppingCart> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ShoppingCart::getUserId, BaseContext.getCurrentId());
+
+        shoppingCartService.remove(queryWrapper);
+
+        return R.success("清空购物车成功");
     }
 }
